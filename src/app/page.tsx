@@ -74,10 +74,10 @@ export default function Home() {
     const filtered = task.filter((f) => f.note.toLowerCase().includes(query) || f.tag.toLowerCase().includes(query));
 
     return (
-        <div className="max-w-3xl mx-auto flex flex-col mt-30 gap-13">
-            <h1 className="text-5xl font-semibold">Minimalist To-Do List</h1>
-            <div className="flex gap-5">
-                <Suspense fallback={<p>Loading tasks...</p>}>
+        <Suspense fallback={<p>Loading tasks...</p>}>
+            <div className="max-w-3xl mx-auto flex flex-col mt-30 gap-13">
+                <h1 className="text-5xl font-semibold">Minimalist To-Do List</h1>
+                <div className="flex gap-5">
                     <Input placeholder="Search a task..." onChange={(e) => handleSearch(e.target.value)} defaultValue={searchParams.get("query")?.toString()} />
                     <Button variant="default" onClick={() => setShowform(!showform)}><Plus />Add Task</Button>
                     {showform && (
@@ -119,22 +119,22 @@ export default function Home() {
                         </form>
                     )}
                     <Button variant="destructive" onClick={handleClear}><Eraser />Clear Task</Button>
-                </Suspense>
+                </div>
+                <div className="flex flex-col gap-5">
+                    <h3 className="text-xl font-semibold">Current tasks</h3>
+                    {filtered.map((t, i) => {
+                        return (
+                            <div key={i} className="p-5 rounded-lg border-border border-2 bg-card w-full flex flex-col gap-1">
+                                <p className="text-sm">{t.note}</p>
+                                <p className="text-xs text-primary">{t.tag}</p>
+                            </div>
+                        )
+                    })}
+                </div>
+                <div className="flex flex-col gap-5">
+                    <h3 className="text-xl font-semibold">Tasks completed</h3>
+                </div>
             </div>
-            <div className="flex flex-col gap-5">
-                <h3 className="text-xl font-semibold">Current tasks</h3>
-                {filtered.map((t, i) => {
-                    return (
-                        <div key={i} className="p-5 rounded-lg border-border border-2 bg-card w-full flex flex-col gap-1">
-                            <p className="text-sm">{t.note}</p>
-                            <p className="text-xs text-primary">{t.tag}</p>
-                        </div>
-                    )
-                })}
-            </div>
-            <div className="flex flex-col gap-5">
-                <h3 className="text-xl font-semibold">Tasks completed</h3>
-            </div>
-        </div>
+        </Suspense>
     )
 }

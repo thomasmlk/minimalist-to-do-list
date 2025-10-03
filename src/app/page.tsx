@@ -12,7 +12,8 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 export interface Task {
     note: string;
@@ -32,6 +33,10 @@ export default function Home() {
     const prio = ["Low", "Medium", "High"]
     const hash = ["All", "Work", "Productivity", "Games", "Movies", "Workout", "Lifestyle"]
 
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
+    const { replace } = useRouter();
+    const query = searchParams.get("query")?.toLowerCase() || "";
 
 
     useEffect(() => {
@@ -53,11 +58,25 @@ export default function Home() {
         setTask([]);
     }
 
+    function handleSearch(term: string) {
+        const params = new URLSearchParams(searchParams);
+        if (term) {
+            params.set("query", term);
+        }
+        else {
+            params.delete("query");
+        }
+        replace(`${pathname}?${params.toString()}`);
+        console.log(term);
+    }
+
+    const filtered = task.filter((f) => f.note.toLowerCase().includes(query) || f.tag.toLowerCase().includes(query));
+
     return (
         <div className="max-w-3xl mx-auto flex flex-col mt-30 gap-13">
             <h1 className="text-5xl font-semibold">Minimalist To-Do List</h1>
             <div className="flex gap-5">
-                <Input placeholder="Search a task..." />
+                <Input placeholder="Search a task..." onChange={(e) => handleSearch(e.target.value)} defaultValue={searchParams.get("query")?.toString()} />
                 <Button variant="default" onClick={() => setShowform(!showform)}><Plus />Add Task</Button>
                 {showform && (
                     <form className=" absolute mt-13 rounded-lg h-fit size-2 w-3xl p-5 flex flex-col gap-5 bg-card border-2 border-border">
@@ -101,7 +120,7 @@ export default function Home() {
             </div>
             <div className="flex flex-col gap-5">
                 <h3 className="text-xl font-semibold">Current tasks</h3>
-                {task.map((t, i) => {
+                {filtered.map((t, i) => {
                     return (
                         <div key={i} className="p-5 rounded-lg border-border border-2 bg-card w-full flex flex-col gap-1">
                             <p className="text-sm">{t.note}</p>

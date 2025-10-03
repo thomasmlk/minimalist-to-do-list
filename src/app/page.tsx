@@ -13,7 +13,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Suspense } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 export interface Task {
@@ -37,11 +36,7 @@ export default function Home() {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();
-    const [query, setQuery] = useState("");
-
-    useEffect(() => {
-        setQuery(searchParams.get("query")?.toLowerCase() || "");
-    }, [searchParams]);
+    const query = searchParams.get("query")?.toLowerCase() || "";
 
 
     useEffect(() => {

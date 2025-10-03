@@ -1,36 +1,118 @@
-import { Plus, Eraser } from "lucide-react";
-import AddTask from "@/components/add-task";
-import DisplayTask from "@/components/display-task";
+"use client"
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Eraser, Plus } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+export interface Task {
+    note: string;
+    priority: string;
+    tag: string;
+}
 
 export default function Home() {
-  return (
-    <div className="pt-30 max-w-3xl mx-auto flex flex-col gap-20 px-5">
 
-      <div className="font-bold text-5xl">
-        Minimalist to-do list
-      </div>
+    const [task, setTask] = useState<Task[]>([]);
 
-      <div className="w-full flex justify-end gap-3">
-        <Input placeholder="Search for a task..." />
-        <AddTask />
-        <Button variant="destructive"><Eraser />Clean</Button>
-      </div>
+    const [showform, setShowform] = useState(false);
+    const [note, setNote] = useState("");
+    const [priority, setPriority] = useState("Medium");
+    const [tag, setTag] = useState("All");
 
-      <div className="flex flex-col gap-5">
-        <div className="font-semibold">
-          Current tasks
+    const prio = ["Low", "Medium", "High"]
+    const hash = ["All", "Work", "Productivity", "Games", "Movies", "Workout", "Lifestyle"]
+
+
+
+    useEffect(() => {
+        const read = JSON.parse(localStorage.getItem("task") || "[]");
+        setTask(read);
+    }, [])
+
+    function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        const newTask = ({ note, priority, tag });
+        const update = [...task, newTask];
+        setTask(update);
+        localStorage.setItem("task", JSON.stringify(update));
+        setShowform(!showform);
+    }
+
+    function handleClear() {
+        localStorage.removeItem("task");
+        setTask([]);
+    }
+
+    return (
+        <div className="max-w-3xl mx-auto flex flex-col mt-30 gap-13">
+            <h1 className="text-5xl font-semibold">Minimalist To-Do List</h1>
+            <div className="flex gap-5">
+                <Input placeholder="Search a task..." />
+                <Button variant="default" onClick={() => setShowform(!showform)}><Plus />Add Task</Button>
+                {showform && (
+                    <form className=" absolute mt-13 rounded-lg h-fit size-2 w-3xl p-5 flex flex-col gap-5 bg-card border-2 border-border">
+                        <Textarea placeholder="I should watch the new Monster: Ed Gein..." onChange={(e) => setNote(e.target.value)} />
+                        <div className="flex justify-between">
+                            <div className="flex gap-5">
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger className="h-9 border-2 px-5 rounded-md text-sm">{tag || "All"}</DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuLabel>Choose a tag</DropdownMenuLabel>
+                                        <DropdownMenuSeparator />
+                                        {hash.map((h, i) => {
+                                            return (
+                                                <div key={i}>
+                                                    <DropdownMenuItem onSelect={(e) => setTag(h)}>{h}</DropdownMenuItem>
+                                                </div>
+                                            )
+                                        })}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger className="h-9 border-2 px-5 rounded-md text-sm">{priority || "Medium"}</DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuLabel>Choose a priority</DropdownMenuLabel>
+                                        <DropdownMenuSeparator />
+                                        {prio.map((p, i) => {
+                                            return (
+                                                <div key={i}>
+                                                    <DropdownMenuItem onSelect={(e) => setPriority(p)}>{p}</DropdownMenuItem>
+                                                </div>
+                                            )
+                                        })}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
+                            <Button type="submit" onClick={handleSubmit}>Confirm</Button>
+                        </div>
+                    </form>
+                )}
+                <Button variant="destructive" onClick={handleClear}><Eraser />Clear Task</Button>
+            </div>
+            <div className="flex flex-col gap-5">
+                <h3 className="text-xl font-semibold">Current tasks</h3>
+                {task.map((t, i) => {
+                    return (
+                        <div key={i} className="p-5 rounded-lg border-border border-2 bg-card w-full flex flex-col gap-1">
+                            <p className="text-sm">{t.note}</p>
+                            <p className="text-xs text-primary">{t.tag}</p>
+                        </div>
+                    )
+                })}
+            </div>
+            <div className="flex flex-col gap-5">
+                <h3 className="text-xl font-semibold">Tasks completed</h3>
+            </div>
         </div>
-        <DisplayTask />
-      </div>
-
-      <div className="flex flex-col gap-5">
-        <div className="font-semibold">
-          Tasks completed
-        </div>
-      </div>
-
-    </div>
-  );
+    )
 }

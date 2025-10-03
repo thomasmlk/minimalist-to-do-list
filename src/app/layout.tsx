@@ -26,14 +26,10 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
           disableTransitionOnChange
         >
           {children}
-          <div className="fixed top-10 right-10 z-50">
-            <ModeToggle />
-          </div>
         </ThemeProvider>
       </body>
     </html>

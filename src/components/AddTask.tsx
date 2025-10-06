@@ -35,11 +35,11 @@ export default function AddTask({ onSubmit }: { onSubmit: (subTask: Task) => voi
         <div>
             <Button variant="default" onClick={() => setShowform(!showform)}><Plus />Add Task</Button>
             {showform && (
-                <div className="bg-card border-border border-2 rounded-2xl absolute w-3xl left-1/2 -translate-x-1/2 mt-5 p-5 flex flex-col gap-5">
+                <div className="bg-card border-border border-2 rounded-2xl absolute w-11/12 md:w-3xl bottom-5 md:bottom-auto left-1/2 -translate-x-1/2 mt-5 p-5 flex flex-col gap-5">
                     <Textarea className="w-full" placeholder="I should watch a new horror movie this night..." onChange={(e) => (setNote(e.target.value))} />
-                    <div className="flex justify-between">
+                    <div className="flex flex-col gap-5 md:flex-row justify-between">
                         <div className="flex gap-5">
-                            <div className="h-9 border-border border-2 px-5 flex text-sm rounded-lg">
+                            <div className="h-9 border-border border-2 px-5 flex text-sm rounded-lg w-full justify-center">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger>{priority || "Priority"}</DropdownMenuTrigger>
                                     <DropdownMenuContent>
@@ -53,7 +53,7 @@ export default function AddTask({ onSubmit }: { onSubmit: (subTask: Task) => voi
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </div>
-                            <div className="h-9 border-border border-2 px-5 flex text-sm rounded-lg">
+                            <div className="h-9 border-border border-2 px-5 flex text-sm rounded-lg w-full justify-center">
                                 <DropdownMenu>
                                     <DropdownMenuTrigger>{tag || "Tag"}</DropdownMenuTrigger>
                                     <DropdownMenuContent>
@@ -68,7 +68,7 @@ export default function AddTask({ onSubmit }: { onSubmit: (subTask: Task) => voi
                                 </DropdownMenu>
                             </div>
                         </div>
-                        <Button value="default" onClick={handleSubmit}><Check />Confirm</Button>
+                        <Button className="w-full md:w-fit" value="default" onClick={handleSubmit}><Check />Confirm</Button>
                     </div>
                 </div>
             )}

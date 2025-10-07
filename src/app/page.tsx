@@ -44,11 +44,13 @@ export default function Home() {
     return (
         <div className="max-w-3xl mx-auto mt-30 flex flex-col gap-18">
             <h1 className="text-5xl font-bold">Minimalist To-Do List</h1>
-            <div className="flex gap-5">
+            <div className="flex md:flex-row flex-col gap-5">
                 <Search placeholder="Search a task..." onSearch={setTerm} />
+                <div className="flex gap-5">
                 <AddTask onSubmit={handleAdd} />
                 <ClearTask onClear={handleClear} />
                 <ChangeDisplay displayMode={displayMode} onClick={toggleDisplay} />
+                </div>
             </div>
             <div className="flex flex-col gap-5">
                 <h3 className="text-xl font-semibold">Current tasks</h3>

@@ -1,16 +1,14 @@
-"use client"
+import { Input } from "@/components/ui/input"
+import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
-
-export default function Search({ onSearch }: { onSearch: (term: string) => void }) {
+export default function Search({ placeholder, onSearch }: { placeholder: string, onSearch: (term: string) => void }) {
 
     const searchParams = useSearchParams();
-    const params = new URLSearchParams(searchParams);
     const pathname = usePathname();
     const { replace } = useRouter();
 
     function handleSearch(term: string) {
+        const params = new URLSearchParams(searchParams);
 
         if (term) {
             params.set("query", term);
@@ -22,6 +20,8 @@ export default function Search({ onSearch }: { onSearch: (term: string) => void 
     }
 
     return (
-        <Input placeholder="Search a task..." onChange={(e) => handleSearch(e.target.value)} defaultValue={searchParams.get('query')?.toString()} />
+        <>
+            <Input placeholder={placeholder} defaultValue={searchParams.get("query")?.toString()} onChange={(e) => { handleSearch(e.target.value) }} />
+        </>
     )
 }

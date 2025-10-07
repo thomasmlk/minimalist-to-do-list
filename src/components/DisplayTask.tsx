@@ -1,23 +1,23 @@
-import { Task } from "@/utils/types"
-import { useState } from "react"
+import { Task } from "@/utils/types";
 import { Checkbox } from "@/components/ui/checkbox";
 
-export default function DisplayTask({ tasks, onToggle }: { tasks: Task[]; onToggle: (state: Task) => void }) {
 
+export default function DisplayTask({ showTask, displayMode, onToggle }: { showTask: Task[], displayMode: "grid" | "list", onToggle: (state: Task) => void }) {
     return (
-        <div className="flex flex-col gap-5">
-            {tasks.toReversed().map((t, i) => {
+        <div className={`${displayMode === "list" ? "flex flex-col gap-5" : "grid grid-cols-1 md:grid-cols-3 gap-5"}`}>
+            {showTask.map((t, i) => {
                 return (
-                    <div key={i} className="p-5 bg-card border-2 border-border flex items-center justify-between rounded-xl">
+                    <div key={i} className="p-5 bg-card border-border border-2 flex items-center rounded-xl justify-between">
                         <div className="flex gap-5 items-center">
-                            <div className="size-3 bg-success rounded-full" />
+                            <div className="size-3 rounded-full bg-success" />
                             <div className="flex flex-col gap-1">
                                 <p className="text-sm">{t.note}</p>
-                                <p className="text-xs text-primary">{t.tag}</p>
+                                <p className="text-sm text-primary">{t.tag}</p>
                             </div>
                         </div>
-                        <Checkbox checked={t.state} onCheckedChange={() => onToggle(t)}  />
+                        <Checkbox checked={t.state} onCheckedChange={() => onToggle(t)} />
                     </div>
+
                 )
             })}
         </div>

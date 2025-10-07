@@ -30,8 +30,8 @@ export default function AddTask({ onSubmit }: { onSubmit: (newTask: Task) => voi
     }
 
     return (
-        <div>
-            <Button variant="default" onClick={() => setShowform(!showform)}><Plus />Add Task</Button>
+        <div className="w-full md:w-fit">
+            <Button className="w-full md:w-fit" variant="default" onClick={() => setShowform(!showform)}><Plus />Add Task</Button>
             {showform && (
                 <form className="w-11/12 bottom-5 md:bottom-auto md:w-3xl left-1/2 flex -translate-x-1/2 mt-5 p-5 rounded-xl border-2 border-border shadow-xl absolute flex-col gap-5 bg-card" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
                     <Textarea className="w-full h-30 md:h-auto" placeholder="Let's add a note for this horror movies night..." onChange={(e) => setNote(e.target.value)} />

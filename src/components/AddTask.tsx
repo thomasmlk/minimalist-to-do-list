@@ -23,18 +23,22 @@ export default function AddTask({ onSubmit }: { onSubmit: (newTask: Task) => voi
     function handleSubmit() {
         const newTask = { note, priority, tag, state: false };
         onSubmit(newTask);
+        setNote("");
+        setPriority("Medium");
+        setTag("All");
+        setShowform(false);
     }
 
     return (
         <div>
             <Button variant="default" onClick={() => setShowform(!showform)}><Plus />Add Task</Button>
             {showform && (
-                <form className="w-3xl left-1/2 flex -translate-x-1/2 mt-5 p-5 rounded-xl border-2 border-border shadow-xl absolute flex-col gap-5 bg-card" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-                    <Textarea className="w-full" placeholder="Let's add a note for this horror movies night..." onChange={(e) => setNote(e.target.value)} />
-                    <div className="flex justify-between">
-                        <div className="flex gap-5">
-                            <div className="px-5 text-sm h-9 rounded-xl flex border-2 border-border">
-                                <DropdownMenu>
+                <form className="w-11/12 bottom-5 md:bottom-auto md:w-3xl left-1/2 flex -translate-x-1/2 mt-5 p-5 rounded-xl border-2 border-border shadow-xl absolute flex-col gap-5 bg-card" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+                    <Textarea className="w-full h-30 md:h-auto" placeholder="Let's add a note for this horror movies night..." onChange={(e) => setNote(e.target.value)} />
+                    <div className="flex flex-col md:flex-row justify-between gap-5">
+                        <div className="flex md:flex-row flex-col gap-5">
+                            <div className="px-5 text-sm h-9 rounded-xl flex border-2 border-border justify-center">
+                                <DropdownMenu modal={false}>
                                     <DropdownMenuTrigger>{priority || "Priority"}</DropdownMenuTrigger>
                                     <DropdownMenuContent>
                                         {prio.map((p, i) => {
@@ -47,8 +51,8 @@ export default function AddTask({ onSubmit }: { onSubmit: (newTask: Task) => voi
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </div>
-                            <div className="px-5 text-sm h-9 rounded-xl flex border-2 border-border">
-                                <DropdownMenu>
+                            <div className="px-5 text-sm h-9 rounded-xl flex border-2 border-border justify-center">
+                                <DropdownMenu modal={false}>
                                     <DropdownMenuTrigger>{tag || "Tag"}</DropdownMenuTrigger>
                                     <DropdownMenuContent>
                                         {hashtag.map((h, i) => {
@@ -62,7 +66,7 @@ export default function AddTask({ onSubmit }: { onSubmit: (newTask: Task) => voi
                                 </DropdownMenu>
                             </div>
                         </div>
-                        <Button variant="default" type="submit"><Check />Confirm</Button>
+                        <Button className="w-full md:w-fit" variant="default" type="submit"><Check />Confirm</Button>
                     </div>
                 </form>
             )}
